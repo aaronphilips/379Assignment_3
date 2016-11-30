@@ -1,5 +1,7 @@
 #include <stdio.h>
-//literally copy pasted...
+//literally copy pasted from notes
+//John look at this: http://alienryderflex.com/quicksort/
+//didn't use it tho
 void swap(int * firstIndex,int * secondIndex);
 void quickSort(int a[], int begin, int end);
 int main( int argc, char *argv[] ) {
