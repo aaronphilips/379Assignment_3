@@ -1,6 +1,6 @@
 #include <stdio.h>
 //literally copy pasted...
-void swap(int array[], int firstIndex,int secondIndex);
+void swap(int * firstIndex,int * secondIndex);
 void quickSort(int a[], int begin, int end);
 int main( int argc, char *argv[] ) {
         int arr[6] ={3,2,1,4,5,6};
@@ -19,7 +19,7 @@ int inPlacePartitioning(int A[], int begin, int end){
         int pivotValue=A[pivotIndex];
         while(begin <= end){
                 if(A[begin] >= pivotValue && A[end] < pivotValue){
-                swap(A,begin,end);
+                swap(&begin,&end);
                 }
                 if(A[begin] < pivotValue) begin++;
                 if(A[end] >= pivotValue) end--;
@@ -27,10 +27,10 @@ int inPlacePartitioning(int A[], int begin, int end){
         return begin;
 }
 
-void swap(int array[], int firstIndex,int secondIndex){
-        int tmp= array[firstIndex];
-        array[firstIndex]=array[secondIndex];
-        array[secondIndex]=tmp;
+void swap(int * firstIndex,int * secondIndex){
+        int * tmp= *firstIndex;
+        *secondIndex=*firstIndex;
+        *secondIndex=*tmp;
 }
 
 void quickSort(int A[], int begin, int end){
