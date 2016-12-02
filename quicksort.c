@@ -9,7 +9,7 @@ int main( int argc, char *argv[] ) {
         quickSort(arr,0,5);
         
         int i;
-        for (i=0;i < sizeof (arr)/sizeof(int) ;i++) {
+        for (i=0;i < 6 ;i++) {
         printf("%d\n",arr[i]);
         }
 
@@ -17,29 +17,42 @@ int main( int argc, char *argv[] ) {
 }
 
 int inPlacePartitioning(int A[], int begin, int end){
-        int pivotIndex= begin + end/2;
+        int pivotIndex= end;
         int pivotValue=A[pivotIndex];
-        while(begin <= end){
-                if(A[begin] >= pivotValue && A[end] < pivotValue){
-                swap(&begin,&end);
+        printf("pivotIndex:%d\n",pivotIndex);
+        printf("pivotValue:%d\n",pivotValue);
+        //for swapping
+        int i=begin;
+        int scan;
+        for(scan=begin;scan<end;scan++){
+                if(A[scan]<pivotValue){
+                      int temp=A[i];
+                      A[i]=A[scan];
+                      A[scan]=temp;
+                      i++;  
                 }
-                if(A[begin] < pivotValue) begin++;
-                if(A[end] >= pivotValue) end--;
         }
-        return begin;
+        int temp=A[i];
+        A[i]=A[end];
+        A[end]=temp;
+        return i;
 }
 
-void swap(int * firstIndex,int * secondIndex){
-        int * tmp= *firstIndex;
-        *secondIndex=*firstIndex;
-        *secondIndex=*tmp;
-}
 
 void quickSort(int A[], int begin, int end){
         //You may want to swap (A[pivotIndex], A[end]) and
         //start from end-1, then return it to its place.
-       
-        int pivot = inPlacePartitioning(A, begin, end);
-        quickSort(A, begin, pivot-1);
-        quickSort(A, pivot+1, end);
+        while(begin<end){
+                int pivot = inPlacePartitioning(A, begin, end);
+                if(pivot-begin<end-pivot){
+                        quickSort(A, begin, pivot-1);
+                        begin=pivot+1;    
+                }
+                else{
+                        quickSort(A, pivot+1, end);
+                        end=pivot-1;
+                }       
+                     
+        }
+        
 }
