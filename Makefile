@@ -1,13 +1,13 @@
-all: quicksort htable heapsort
+all: heapsort
 	
-quicksort:quicksort.o 
-	gcc -o quicksort quicksort.o
+heapsort.o: heapsort.c htable.h
+	gcc -c heapsort.c
 
-htable:htable.o
-	gcc -o htable htable.o
+heapsort: heapsort.o htable.o htable.h
+	gcc -o  heapsort heapsort.o htable.o
 
-heapsort:heapsort.o
-	gcc -o heapsort heapsort.o
+htable.o: htable.c htable.h
+	gcc -c htable.c
 
 clean:
 	rm -f quicksort.o

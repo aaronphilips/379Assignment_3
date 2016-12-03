@@ -1,20 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "htable.h"
 
 #define table_size 2000
 #define window_size 10
 
 int current_window_usage = -1; 
-
-
-
-typedef struct $linked_list{
-	int key; int data; struct $linked_list *next; struct $linked_list *previous;
-} linked_list;
-
-//Current table
-linked_list** table;
 
 void opertation(int read, int address){
 	//unitialized
@@ -22,18 +11,20 @@ void opertation(int read, int address){
 		current_window_usage = 10;
 	}
 	current_window_usage--;
-	if(!read){
-		printf("Read from address %d\n", address);
-	}
-	else{
-		printf("Wrote to address %d\n", address);
-	}
+	// if(!read){
+	// 	printf("Read from address %d\n", address);
+	// }
+	// else{
+	// 	printf("Wrote to address %d\n", address);
+	// }
 }
 
 linked_list* ll_insert(linked_list* head, linked_list* new){
+	
 	new->next=head;
 	if(head != NULL)
-	head->previous=new;
+		head->previous=new;
+	
 	head=new;
 	return head;
 }
@@ -73,14 +64,13 @@ linked_list* ll_new(int key, int data){
 void done(){
 	int i;
 	for(i=0; i<table_size; i++){
-		linked_list* currentNode = table[i];
-		while(currentNode != NULL){
-			// printf("Current Memory:%d:  Current Value:%d\n", i, currentNode->data);
-			// sleep(1);
-			currentNode = currentNode->next;
+		linked_list* head = table[i];
+		linked_list* search = ll_search(head, i);
+		if(search != NULL){
+			printf("%d\n", search->data);
 		}
 
-		free(currentNode);
+		free(head);
 	}
 }
 
@@ -91,22 +81,10 @@ void init(){
 
 //Insert it if it is not in there and swap values if it is
 void ht_insert(linked_list** table, int size, linked_list* item){
-	//TODO: log something
 	
 	//Key we are searching for
 	int key=item->key;
-	//Item in list we are at
-	linked_list* head = table[key%size];
-	
-	linked_list* searchedList = ll_search(head, key);
-	if(searchedList == NULL){
-		table[key%size]=ll_insert(table[key%size],item);
-	}
-	//If it already exists swap the data
-	else{
-		searchedList->data = item->data;
-		free(item);
-	}
+	table[key%size] = ll_insert(table[key%size],item);
 }
 
 void ht_delete(linked_list** table, int size, linked_list* item){
@@ -131,34 +109,34 @@ int get(unsigned int address){
 	
 }
 
-int main(){
-	/* This process function generates a number of integer */
-/* keys and sorts them using bubblesort.               */
-	int N, i, j, k, t, min, f;
-	scanf ("%d", &N);
-	init ();
+// int main(){
+// 	/* This process function generates a number of integer */
+// /* keys and sorts them using bubblesort.               */
+// 	int N, i, j, k, t, min, f;
+// 	scanf ("%d", &N);
+// 	init ();
 
-	/* Generate the sorting problem (just random numbers) */
-	for (i = 0; i < N; i++){
-	 	int randomNumber = lrand48();
-	 	put(i, randomNumber);
-	}
+// 	/* Generate the sorting problem (just random numbers) */
+// 	for (i = 0; i < N; i++){
+// 	 	int randomNumber = lrand48();
+// 	 	put(i, randomNumber);
+// 	}
 
-	/* Sort the numbers */
-	for (i = 0; i < N-1; i++) {
-		for (j = i+1, f = min = get (i), k = i; j < N; j++){
+// 	/* Sort the numbers */
+// 	for (i = 0; i < N-1; i++) {
+// 		for (j = i+1, f = min = get (i), k = i; j < N; j++){
 			
-			if ((t = get (j)) < min) {
-			k = j;
-			min = t;
-			}
-		}
+// 			if ((t = get (j)) < min) {
+// 			k = j;
+// 			min = t;
+// 			}
+// 		}
 
-		put (i, min);
-		put (k, f);
-	}
-	done ();
-}
+// 		put (i, min);
+// 		put (k, f);
+// 	}
+// 	done ();
+// }
 
 
 
