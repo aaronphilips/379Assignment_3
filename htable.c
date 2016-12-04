@@ -8,6 +8,7 @@
 int current_window_usage = -1; 
 FILE * fp;
 
+int workingset_total=0;
 void opertation(unsigned int address){
 	if(current_window_usage == -1){
 		current_window_usage = window_size;
@@ -86,6 +87,8 @@ void printStatistics(){
 	memset(windowArray, -1, sizeof(int) * window_size);
 	int windowSet = 0;
 	
+	workingset_total=0;
+	
 	while(fgets(buff, 1024, fp))
     {
     	int numberOfPages = 0;
@@ -105,7 +108,7 @@ void printStatistics(){
 
     	printf("%d window has working set size of %d\n", windowSet , numberOfPages);
     	windowSet++;
-
+    	workingset_total+=numberOfPages;
     }
 }
 
