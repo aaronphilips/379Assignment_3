@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #ifndef htable_header
 #define htable_header
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct $linked_list{
 	int key; int data; struct $linked_list *next; struct $linked_list *previous;
@@ -12,9 +14,15 @@ typedef struct $linked_list{
 linked_list** table;
 
 //Functions
-void opertation(int read, int address);
+void printStatistics();
+void opertation(unsigned int address);
+void freeLinkedList(linked_list* head);
 void done();
 void init();
+
+//Array helpers 
+void insertIntoArray(int * array, int number, int size);
+int doesNumberExistInArray(int * array, int number, int size);
 
 //Linked List
 linked_list* ll_insert(linked_list* head, linked_list* new);
@@ -29,5 +37,7 @@ void ht_delete(linked_list** table, int size, linked_list* item);
 //Memory Access and Setting
 void put(unsigned int address, int value);
 int  get(unsigned int address);
+
+
 
 #endif
