@@ -1,10 +1,11 @@
-#include "htable.h"
+#include "simulator.h"
 
 
 #define table_size 2000
-#define window_size 20
-#define page_size 2
-
+// #define window_size 20
+// #define page_size 2
+int window_size;
+int page_size;
 int current_window_usage = -1; 
 FILE * fp;
 
@@ -110,6 +111,8 @@ void printStatistics(){
     	windowSet++;
     	workingset_total+=numberOfPages;
     }
+	double average_working_set_size=(double)workingset_total/windowSet;
+	printf("Average working set size over time of execution: %lf\n",average_working_set_size);
 }
 
 int doesNumberExistInArray(int * array, int number, int size){
@@ -158,8 +161,9 @@ void freeLinkedList(linked_list* head){
 		free(temp);
 	}
 }
-void init(){
-	
+void init(int psize,int winsize){
+	page_size=psize;
+	window_size=winsize;
 	fp = fopen("filename.csv","w+");
 
 	table = (linked_list **)calloc(table_size,sizeof(linked_list*));

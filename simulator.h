@@ -1,5 +1,5 @@
-#ifndef htable_header
-#define htable_header
+#ifndef simulator_header
+#define simulator_header
 
 #include <stdio.h>
 #include <unistd.h>
@@ -18,7 +18,7 @@ void printStatistics();
 void opertation(unsigned int address);
 void freeLinkedList(linked_list* head);
 void done();
-void init();
+void init(int psize,int winsize);
 
 //Array helpers 
 void insertIntoArray(int * array, int number, int size);

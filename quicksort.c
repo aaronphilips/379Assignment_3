@@ -1,7 +1,7 @@
 #include <time.h>
-#include "htable.h"
-
-
+#include "simulator.h"
+int psize;
+int winsize;
 
 
 
@@ -58,12 +58,12 @@ void quickSort( int begin, int end){
         
 }
 
-int main(){
+void process(){
         int N, i;
         printf("Please enter the number of elements: \n");
         scanf ("%d", &N);
 
-        init();
+        init(psize,winsize);
         printf("got past init \n" );
         srand ( time(NULL) );
         /* Generate the sorting problem (just random numbers) */
@@ -74,4 +74,10 @@ int main(){
 
         quickSort(0,N-1);
         done();
+}
+int main(int argc, char **argv){
+        if(argc!=3)return -1;
+        psize=atoi(argv[1]);
+	winsize=atoi(argv[2]);
+	process();   
 }

@@ -1,6 +1,7 @@
 #include <time.h>
-#include "htable.h"
-
+#include "simulator.h"
+int psize;
+int winsize;
 
 void printHeap(int size){
 	int i;
@@ -75,15 +76,14 @@ void heapSort(int size){
 	}
 
 }
-
-int main(){
+void process(){
 	/* This process function generates a number of integer */
 	/* keys and sorts them using bubblesort.               */
 	int N, i;
 	printf("Please enter the number of elements: \n");
 	scanf ("%d", &N);
 
-	init();
+	init(psize,winsize);
 	srand ( time(NULL) );
 	/* Generate the sorting problem (just random numbers) */
 	for (i = 0; i < N; i++){
@@ -93,6 +93,12 @@ int main(){
 
 	heapSort(N);
 	done();
+}
+int main(int argc, char **argv){
+	if(argc!=3)return -1;
+	psize=atoi(argv[1]);
+	winsize=atoi(argv[2]);
+	process();
 
 }
 
