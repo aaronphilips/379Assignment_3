@@ -90,6 +90,7 @@ void printStatistics(){
     {
     	int numberOfPages = 0;
     	char* token;
+    	memset(windowArray, -1, sizeof(int) * window_size);
     	token =  strtok(buff, ",");
     	while(token != NULL){
     		
@@ -123,7 +124,6 @@ int doesNumberExistInArray(int * array, int number, int size){
 
 void insertIntoArray(int* array, int number, int size){
 	int i;
-	printf("Inserting %d into array")
 	for(i = 0; i < size; i++){
 		int temp = array[i];
 		if (temp == -1){
