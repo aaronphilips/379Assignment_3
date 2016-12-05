@@ -63,7 +63,7 @@ void process(){
         // printf("Please enter the number of elements: \n");
         // scanf ("%d", &N);
         
-        N=100000;
+        N=1000000;
         init(psize,winsize);
         printf("got past init \n" );
         srand ( time(NULL) );
@@ -76,8 +76,7 @@ void process(){
         quickSort(0,N-1);
 
         // for (i = 0; i < N; i++){
-        //         int temp=get(i);
-	//  	printf("%d\n",get(i));
+        //         printf("%d\n",get(i));
 	// }  
 
         done();

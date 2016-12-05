@@ -82,7 +82,7 @@ void process(){
 	unsigned int N, i;
 	// printf("Please enter the number of elements: \n");
 	// scanf ("%d", &N);
-	N=100000;
+	N=1000000;
     init(psize,winsize);
     printf("got past init \n" );
 	srand ( time(NULL) );
@@ -93,6 +93,9 @@ void process(){
 	}
 
 	heapSort(N);
+	// for (i = 0; i < N; i++){
+    //             printf("%d\n",get(i));
+	// } 
 	done();
 }
 int main(int argc, char **argv){
