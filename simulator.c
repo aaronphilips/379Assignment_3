@@ -1,7 +1,7 @@
 #include "simulator.h"
 
 
-#define table_size 2000
+#define table_size 204800
 // #define window_size 20
 // #define page_size 2
 int window_size;

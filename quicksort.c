@@ -59,10 +59,11 @@ void quickSort( int begin, int end){
 }
 
 void process(){
-        int N, i;
-        printf("Please enter the number of elements: \n");
-        scanf ("%d", &N);
-
+        unsigned int N, i;
+        // printf("Please enter the number of elements: \n");
+        // scanf ("%d", &N);
+        
+        N=100000;
         init(psize,winsize);
         printf("got past init \n" );
         srand ( time(NULL) );
@@ -73,11 +74,19 @@ void process(){
         }
 
         quickSort(0,N-1);
+
+        // for (i = 0; i < N; i++){
+        //         int temp=get(i);
+	//  	printf("%d\n",get(i));
+	// }  
+
         done();
+        
 }
 int main(int argc, char **argv){
         if(argc!=3)return -1;
         psize=atoi(argv[1]);
 	winsize=atoi(argv[2]);
-	process();   
+	process(); 
 }
+	

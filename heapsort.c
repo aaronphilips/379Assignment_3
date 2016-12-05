@@ -79,11 +79,12 @@ void heapSort(int size){
 void process(){
 	/* This process function generates a number of integer */
 	/* keys and sorts them using bubblesort.               */
-	int N, i;
-	printf("Please enter the number of elements: \n");
-	scanf ("%d", &N);
-
-	init(psize,winsize);
+	unsigned int N, i;
+	// printf("Please enter the number of elements: \n");
+	// scanf ("%d", &N);
+	N=100000;
+    init(psize,winsize);
+    printf("got past init \n" );
 	srand ( time(NULL) );
 	/* Generate the sorting problem (just random numbers) */
 	for (i = 0; i < N; i++){
@@ -99,7 +100,6 @@ int main(int argc, char **argv){
 	psize=atoi(argv[1]);
 	winsize=atoi(argv[2]);
 	process();
-
 }
 
 
