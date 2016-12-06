@@ -15,14 +15,14 @@ linked_list** table;
 
 //Functions
 void printStatistics();
-void opertation(unsigned int address);
+void recordOperation(unsigned int address);
 void freeLinkedList(linked_list* head);
 void done();
 void init(int psize,int winsize);
+void setTableSize(int numOfEntries);
 
 //Array helpers 
-void insertIntoArray(int * array, int number, int size);
-int doesNumberExistInArray(int * array, int number, int size);
+void insertIntoWindowArray(int * array, int number, int size);
 
 //Linked List
 linked_list* ll_insert(linked_list* head, linked_list* new);
@@ -37,7 +37,5 @@ void ht_delete(linked_list** table, int size, linked_list* item);
 //Memory Access and Setting
 void put(unsigned int address, int value);
 int  get(unsigned int address);
-
-
 
 #endif

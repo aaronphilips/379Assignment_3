@@ -1,14 +1,8 @@
 #include <time.h>
 #include "simulator.h"
+
 int psize;
 int winsize;
-
-void printHeap(int size){
-	int i;
-	for (i = 0; i < size; i++){
-		printf("%d\n", get(i));
-	}
-}
 
 void makeMaxHeap(int size){
 	int value, iCurrentNode, iCheckingNode, child;
@@ -77,27 +71,25 @@ void heapSort(int size){
 
 }
 void process(){
-	/* This process function generates a number of integer */
-	/* keys and sorts them using bubblesort.               */
+
 	unsigned int N, i;
-	// printf("Please enter the number of elements: \n");
-	// scanf ("%d", &N);
-	N=1000000;
-    init(psize,winsize);
-    printf("got past init \n" );
+	printf("Please enter the number of elements for our sort: \n");
+    scanf ("%d", &N);
+
+    init( psize, winsize);
+    setTableSize(N);
+
 	srand ( time(NULL) );
 	/* Generate the sorting problem (just random numbers) */
 	for (i = 0; i < N; i++){
 	 	int randomNumber = rand();
-	 	put(i, randomNumber % 10000);
+	 	put(i, randomNumber);
 	}
 
 	heapSort(N);
-	// for (i = 0; i < N; i++){
-    //             printf("%d\n",get(i));
-	// } 
 	done();
 }
+
 int main(int argc, char **argv){
 	if(argc!=3)return -1;
 	psize=atoi(argv[1]);

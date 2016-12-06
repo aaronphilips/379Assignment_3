@@ -1,31 +1,32 @@
 #include "simulator.h"
 
-
-#define table_size 204800
-// #define window_size 20
-// #define page_size 2
+int table_size;
 int window_size;
 int page_size;
-int current_window_usage = -1; 
-FILE * fp;
+int current_window_usage; 
+int * current_window;
+int number_of_pages = 0;
+int working_set_total = 0;
+int number_of_windows = 0;
 
-int workingset_total=0;
-void opertation(unsigned int address){
-	if(current_window_usage == -1){
-		current_window_usage = window_size;
-	}
-
-	int pageNumber = address / page_size;
-	char buff[20];
-	sprintf(buff, "%d", pageNumber);
-
-	if(current_window_usage == 1){
-		fprintf(fp, "%s\n", buff);
-		current_window_usage = window_size;
-	}
+void recordOperation(unsigned int address){
 	
+	int pageNumber = address / page_size;
+	insertIntoWindowArray(current_window, pageNumber, window_size);
+	
+	if(current_window_usage == 1){
+		current_window_usage = window_size;
+		working_set_total += number_of_pages;
+		number_of_windows++;
+
+		// printf("Window %d had size of %d\n", number_of_windows, number_of_pages);
+		
+		//Reset the array and reset the number of pages used to 0
+		memset(current_window, -1, sizeof(int) * window_size);
+		number_of_pages = 0;
+	}
+
 	else{
-		fprintf(fp, "%s,",buff);
 		current_window_usage--;
 	}
 }
@@ -74,73 +75,46 @@ linked_list* ll_new(int key, int data){
 }
 
 void printStatistics(){
-	fclose(fp);
 
-	//Not Certain as to why i need to do this
-	fp = fopen("filename.csv", "r");
-
-	if(fp == NULL){
-		printf("Failed to open file \n");
-	}
-
-	char buff[1024];
-	int windowArray[window_size];
-	memset(windowArray, -1, sizeof(int) * window_size);
-	int windowSet = 0;
-	
-	workingset_total=0;
-	
-	while(fgets(buff, 1024, fp))
-    {
-    	int numberOfPages = 0;
-    	char* token;
-    	memset(windowArray, -1, sizeof(int) * window_size);
-    	token =  strtok(buff, ",");
-    	while(token != NULL){
-    		
-    		int num = strtol(token, NULL, 10);
-    		if(!doesNumberExistInArray(windowArray, num, window_size)){
-    			numberOfPages++;
-    		}
-    		
-    		//Get next token
-    		token = strtok(NULL, ",");
-    	}
-
-    	printf("%d window has working set size of %d\n", windowSet , numberOfPages);
-    	windowSet++;
-    	workingset_total+=numberOfPages;
-    }
-	double average_working_set_size=(double)workingset_total/windowSet;
-	printf("Average working set size over time of execution: %lf\n",average_working_set_size);
+	double average_working_set_size = (double)working_set_total/number_of_windows;
+	printf("Average working set size over time of execution: %lf\n", average_working_set_size);
 }
 
-int doesNumberExistInArray(int * array, int number, int size){
+void printArray(){
+	//Start of array
+	int i;
+	printf("Starting Array: ");
+	for(i = 0; i < window_size; i++){
+		int temp = current_window[i];
+		printf("%d ", temp);
+	}
+	printf(" Ending Array\n");
+}
+//Tries to insert that page number into current list if its not already in there
+// If it is in there it returns
+void insertIntoWindowArray(int* array, int number, int size){
+	
 	int i;
 	for(i = 0; i < size; i++){
 		int temp = array[i];
-		if (number == temp){
-			return 1;
-		}
-	}
-
-	insertIntoArray(array, number, size);
-	return 0;
-}
-
-void insertIntoArray(int* array, int number, int size){
-	int i;
-	for(i = 0; i < size; i++){
-		int temp = array[i];
-		if (temp == -1){
+		
+		//If it is unitialized insert our new element in there
+		if(temp == -1){
 			array[i] = number;
+			number_of_pages++;
+			return;
+		}
+
+		if (number == temp){
 			return;
 		}
 	}
-	printf("Array is full that you are inserting into.\n");
+
+	printf("Array is full that you are inserting into. This should not happen.\n");
 }
 
 void done(){
+	printf("Got to done.\n");
 	int i;
 	printStatistics();
 	for(i=0; i<table_size; i++){
@@ -150,7 +124,7 @@ void done(){
 	}
 
 	free(table);
-	fclose(fp);
+	free(current_window);
 }
 
 void freeLinkedList(linked_list* head){
@@ -163,10 +137,18 @@ void freeLinkedList(linked_list* head){
 }
 void init(int psize,int winsize){
 	page_size=psize;
-	window_size=winsize;
-	fp = fopen("filename.csv","w+");
+	window_size = winsize;
+	current_window_usage = winsize;
 
-	table = (linked_list **)calloc(table_size,sizeof(linked_list*));
+	current_window = (int *)malloc(sizeof(int)* winsize);
+	memset(current_window, -1, sizeof(int) * window_size);
+}
+
+void setTableSize(int numOfEntries){
+	
+	//Simple formula for determining a decent sized table
+	table_size = numOfEntries/2 + 1;	
+	table = (linked_list **)calloc(table_size, sizeof(linked_list*));
 }
 
 //Insert it if it is not in there and swap values if it is
@@ -184,49 +166,18 @@ void ht_delete(linked_list** table, int size, linked_list* item){
 }
 
 void put(unsigned int address, int value){
-	
 	linked_list* item = ll_new(address, value);
 	ht_insert(table, table_size, item); 
-	opertation(address);
+	recordOperation(address);
 }
 
 int get(unsigned int address){
-	
 	linked_list* head = table[address%table_size];
 	linked_list* list = ll_search(head,address);
-	opertation(address);
+	recordOperation(address);
 	return list->data;
 	
 }
-
-// int main(){
-// 	/* This process function generates a number of integer */
-// /* keys and sorts them using bubblesort.               */
-// 	int N, i, j, k, t, min, f;
-// 	scanf ("%d", &N);
-// 	init ();
-
-// 	/* Generate the sorting problem (just random numbers) */
-// 	for (i = 0; i < N; i++){
-// 	 	int randomNumber = lrand48();
-// 	 	put(i, randomNumber);
-// 	}
-
-// 	/* Sort the numbers */
-// 	for (i = 0; i < N-1; i++) {
-// 		for (j = i+1, f = min = get (i), k = i; j < N; j++){
-			
-// 			if ((t = get (j)) < min) {
-// 			k = j;
-// 			min = t;
-// 			}
-// 		}
-
-// 		put (i, min);
-// 		put (k, f);
-// 	}
-// 	done ();
-// }
 
 
 
