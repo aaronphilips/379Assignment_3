@@ -19,7 +19,7 @@ void recordOperation(unsigned int address){
 		working_set_total += number_of_pages;
 		number_of_windows++;
 
-		// printf("Window %d had size of %d\n", number_of_windows, number_of_pages);
+		printf("Window %d had size of %d\n", number_of_windows, number_of_pages);
 		
 		//Reset the array and reset the number of pages used to 0
 		memset(current_window, -1, sizeof(int) * window_size);
