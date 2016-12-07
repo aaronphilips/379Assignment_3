@@ -4,6 +4,7 @@
 int psize;
 int winsize;
 
+//This makes a max heap of specific size using our simulator interface
 void makeMaxHeap(int size){
 	int value, iCurrentNode, iCheckingNode, child;
 	for(iCurrentNode = 1; iCurrentNode < size; iCurrentNode++){
@@ -23,7 +24,8 @@ void makeMaxHeap(int size){
 	}
 }
 
-//Re adjusts the array after we take the largest
+//Re adjusts the array to be a max heap up to the range variable
+//This is called after each time we pop the max value for a heap
 void reAdjustArray(int range){
 	int child, iCurrentNode, value;
 	
@@ -45,12 +47,13 @@ void reAdjustArray(int range){
 			child = 2*iCurrentNode+1;
 		}
 
-		//If not we are now is a valid heap
+		//We now have a valid heap
 		else{
 			break;
 		}
 	}
 	
+	//Do the final swap
 	put(iCurrentNode, value);
 }
 
@@ -66,6 +69,7 @@ void heapSort(int size){
 		put(0, get(i));
 		put(i, temp);
 		
+		//After we pop first one off re make a valid heap
 		reAdjustArray(i);
 	}
 
@@ -76,11 +80,11 @@ void process(){
 	printf("Please enter the number of elements for our sort: \n");
     scanf ("%d", &N);
 
-    init( psize, winsize);
+    init(psize, winsize);
     setTableSize(N);
 
+	//We give it the time so the random numbers are actually random
 	srand ( time(NULL) );
-	/* Generate the sorting problem (just random numbers) */
 	for (i = 0; i < N; i++){
 	 	int randomNumber = rand();
 	 	put(i, randomNumber);
